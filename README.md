@@ -13,7 +13,7 @@ including:
 A Juypter notebook to illustrate the usage with a dummy example.
 
 
-#Testing
+# Testing
 
 A test module is included to test the metric methods used.
 More can be added and tested
@@ -25,6 +25,6 @@ pip install pytest
 py.test test_metric_calculation.py
 '''
 
-#Additional Notes
+# Additional Notes
 
 More metrics will be added
