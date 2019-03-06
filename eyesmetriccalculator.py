@@ -29,8 +29,6 @@ class EyesMetricCalculator():
         if self.screen_dimensions[0] < 0 or  self.screen_dimensions[1] < 0:
             raise Exception('Screen dimension cannot be negative')
 
-
-
         self.fixation_array = np.array(data)
 
 
@@ -70,7 +68,7 @@ class EyesMetricCalculator():
         # compute spatial Density
         return SpatialDensity(self.fixation_array[:, [0, 1]], cellx, celly, self.screen_dimensions)
 
-    def convexHull(self):
+    def convexHull(self,func='area'):
         """Calculates the ConvexHull based on Scipy Spatial ConvexHull
 
         Returns
@@ -79,7 +77,7 @@ class EyesMetricCalculator():
 
         """
         # taking only the x and y columns from the fixation array
-        return ConvexHull(self.fixation_array[:, [0, 1]])
+        return ConvexHull(self.fixation_array[:, [0, 1]],func)
 
 
     def NNI(self):

@@ -32,28 +32,30 @@ class ConvexHull(Metric):
     a list of fixation coordinates on the screen
     '''
 
-    def __init__(self, fixation_array):
-        super().__init__(fixation_array)
-
-    def compute(self, func='area'):
-        """Compute the convexhull result based on the func parameter
+    def __init__(self, fixation_array,func):
+        """Init convexhull
 
         Parameters
         ----------
         func : str
-            can take area,volume
+            area or volume
+        """
+        super().__init__(fixation_array)
+        if not func in ('area','volume'):
+            raise Exception('Function not supported please use \'area\' or \'volume\' ')
+        self.func = func
+
+    def compute(self):
+        """Compute the convexhull result based on the func parameter
         Returns
         -------
         float
         """
-        conv_obj = conv(self.fixation_array[:, [0, 1]])
-        if func == 'area':
-            return conv_obj.area
-        elif func == 'volume':
-            return conv_obj.volume
+        con = conv(self.fixation_array[:, [0, 1]])
+        if self.func == 'area':
+            return con.area
         else:
-            print('function provided not supported')
-
+            return con.volume
 
 class SpatialDensity(Metric):
     '''
@@ -129,7 +131,9 @@ class SpatialDensity(Metric):
 
             self.grid[i, j] = 1
 
-        return np.sum(self.grid) / self.num_cells
+        res = np.sum(self.grid) / self.num_cells
+        assert(res <= 1 and res >= 0),'Invalid spatialDensity value'
+        return res
 
 
 class NNI(Metric):
