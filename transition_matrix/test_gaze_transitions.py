@@ -28,6 +28,7 @@ TEST_GAZE_ARRAY = np.array([
     [540, 540, 0]])
 
 
+
 @pytest.fixture
 def setup_transition(request):
     return GazeTransitions(TEST_SCREENDIM, TEST_AOI_DICT, TEST_GAZE_ARRAY)

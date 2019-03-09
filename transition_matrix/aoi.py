@@ -21,8 +21,6 @@ class AOI():
         """
         self.screen_x = screen_dimension[0]
         self.screen_y = screen_dimension[1]
-        self.points_in_aoi = []  # defines the points that belong to the aoi [[x1,y1],..]
-
 
 class PolyAOI(AOI):
     '''

@@ -1,4 +1,4 @@
-from metrics import *
+from .metrics import *
 import numpy as np
 
 
@@ -106,9 +106,9 @@ class EyesMetricCalculator():
         Returns
         -------
         GazeEntropy object
-        
+
         """
-        return GazeEntropy(self,self.screen_dimensions,aoi_dict,self.gaze_array,entropy)
+        return GazeEntropy(self.screen_dimensions,aoi_dict,self.gaze_array,entropy)
 
 
 

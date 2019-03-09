@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib
 from .aoi import *
+import copy
 
 
 class GazeTransitions():
@@ -27,6 +28,7 @@ class GazeTransitions():
         screen_dimension: tuple or list of size
         """
         self.aoi_dict = aoi_dict
+        self.aoi_count_dict = dict()
         self.gaze_array = gaze_array
         self.screen_dim = screen_dimension
         self.points_outside_aoi = 0
@@ -41,7 +43,7 @@ class GazeTransitions():
 
         Parameters
         ----------
-        aoi_name : str
+        aois : str
                 aoi name given in the dict
         Returns
         -------
@@ -49,10 +51,11 @@ class GazeTransitions():
 
         """
         # checks if aoi belongs to the list provided
-        for k, a in self.aoi_dict.items():
+        for k, a in self.aoi_count_dict.items():
             if k == aoi:
-                return len(self.aoi_dict[k].points_in_aoi) / self.n
+                return len(self.aoi_count_dict[k]) / self.n
         raise Exception('AOI is not in the AOI dict provided')
+
 
     def _load_transitions(self):
         """
@@ -69,14 +72,19 @@ class GazeTransitions():
         """
         fixation_array = [Fixation(x, y) for x, y, z in self.gaze_array]
 
+        #init count points in AOI dictionary
+        for k, a in self.aoi_dict.items():
+            self.aoi_count_dict[k] = [] #representing the points that each dict has
+
+
         prev_aoi = None  # init prev_aoi
+
         for indx_fx in range(len(fixation_array)):
             found_aoi = False  # checks whether an aoi was found for a point
             for indx, (aoi_name, aoi) in enumerate(self.aoi_dict.items()):
                 fx = fixation_array[indx_fx]  # current fixation
-
                 if fx.get_coor() in aoi:
-                    self.aoi_dict[aoi_name].points_in_aoi.append(fx.get_coor())
+                    self._update_pointsContainer(aoi_name,fx)
                     fx.aoi = aoi
                     # check if the previous fixation was in a certain AOI
                     if prev_aoi is not None:
@@ -93,6 +101,37 @@ class GazeTransitions():
 
             if prev_aoi is None:
                 self.points_outside_aoi += 1
+
+    def get_aoi_points(self,aoi):
+        """Returns a list of points that are contained in an AOI
+
+        Parameters
+        ----------
+        aoi : Str
+            aoi name
+
+        Returns
+        -------
+        list of tuples
+            list of x,y coordinates that are contained in AOI
+        """
+        try:
+            return self.aoi_count_dict[aoi]
+        except KeyError:
+            print('AOI name not recognized')
+
+    def _update_pointsContainer(self,aoi_name,fx):
+        """updates aoi array of points
+
+        Parameters
+        ----------
+        aoi_name: str
+
+        fx : Fixation
+            fixation to be added to the list of points
+        """
+        self.aoi_count_dict[aoi_name].append(fx.get_coor())
+
 
     def get_transition_matrix(self):
         """Returns the transition matrix between AOI's
