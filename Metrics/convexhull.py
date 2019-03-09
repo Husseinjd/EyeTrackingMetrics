@@ -27,7 +27,7 @@ class ConvexHull(Metric):
         """Compute the convexhull result based on the func parameter
         Returns
         -------
-        float
+        convexhull: float
         """
         con = conv(self.fixation_array[:, [0, 1]])
         if self.func == 'area':

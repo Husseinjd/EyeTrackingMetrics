@@ -8,6 +8,13 @@ TEST_SCREENDIM =  (100, 50)
 TEST_CELLX = 50
 TEST_CELLY = 10
 
+tp = np.array([[0.78,0.06,0.16] ,
+            [0.18,0.46,0.36],
+             [0.15,0.09,0.76]
+            ])
+
+sp = np.array([0.42,0.14,0.44])
+
 
 @pytest.fixture
 def valid_calc(request):
@@ -26,3 +33,8 @@ def test_spatialDensity_grid(valid_calc):
 
 def test_nni(valid_calc):
     assert(valid_calc.NNI().compute() == 2.3200303835449625 ),'wrong NNI Value'
+
+
+def test_entropy(valid_calc):
+    pass #assert ht = 0.73
+    #assert hs = 1.0

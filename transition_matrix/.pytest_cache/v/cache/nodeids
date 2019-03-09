@@ -1,0 +1,5 @@
+[
+  "test_gaze_transitions.py::test_prob",
+  "test_gaze_transitions.py::test_transitions",
+  "test_gaze_transitions.py::test_points_outside"
+]
