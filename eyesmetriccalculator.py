@@ -17,9 +17,6 @@ class EyesMetricCalculator():
             tuple containing the screen dimensions (width , length)
         """
 
-        #adding appending aoi's for later calculations
-        self.aoi_list = []
-
         if not isinstance(screen_dimension, tuple) and not isinstance(screen_dimension, list):
             raise Exception('screen_dimension is not a tuple or list')
         else:
@@ -95,7 +92,7 @@ class EyesMetricCalculator():
 
         Parameters
         ----------
-        aoi_dict : dict {aoi_poly1: PolyAOI(..)}
+        aoi_dict : dict {'aoi_poly1': PolyAOI(..)}
                 dictionary containing AOI names as keys
                 and AOI object as values
 
