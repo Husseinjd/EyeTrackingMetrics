@@ -25,16 +25,15 @@ A Juypter notebook is included to illustrate the usage with some dummy examples.
 ## Testing
 
 A test module is included to test the metric methods used.
-More can be added and tested
+More can be added and tested.
 
 to run the tests across the whole package:
 
 ```
 pip install pytest
 
-pytest [directory]
+pytest [package-directory]
 ```
 
-## Additional Notes
-
-More metrics will be added
+## Future Work
+Addition of more metrics 
