@@ -1,4 +1,4 @@
-from metrics import *
+from .metrics import *
 import numpy as np
 
 
