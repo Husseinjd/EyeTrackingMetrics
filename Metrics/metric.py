@@ -21,3 +21,9 @@ class Metric():
             raise Exception('Fixation array is not a numpy array')
 
         self.fixation_array = fixation_array
+
+    def compute(self):
+        '''
+        - implement metric computation
+        '''
+        raise NotImplementedError("compute should be implemented for each metric")
