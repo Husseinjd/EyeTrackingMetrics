@@ -4,7 +4,7 @@ import numpy as np
 
 class EyesMetricCalculator():
 
-    def __init__(self, data_fixations,data_gazes, screen_dimension):
+    def __init__(self, data_fixations, data_gazes, screen_dimension):
         """Init Method
 
         Parameters

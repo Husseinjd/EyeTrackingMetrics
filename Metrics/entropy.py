@@ -37,7 +37,8 @@ class GazeEntropy(Metric):
         self.gaze_array = gaze_array
         self.entropy_method = entropy
         self.aoi_dict = aoi_dict
-        self.gz     = GazeTransitions(screen_dimension,aoi_dict,gaze_array)
+        self.gz = GazeTransitions(screen_dimension,aoi_dict,gaze_array)
+        # self.gz.plot_all(background_img_path="background.png", annotate_points=False)
         # build the probability matrices
         self.sp = np.array(self.get_stationary_prob())
         self.tp  = self.get_tranprobabilities()

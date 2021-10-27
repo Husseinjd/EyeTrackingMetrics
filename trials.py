@@ -6,7 +6,7 @@ from eyesmetriccalculator import EyesMetricCalculator
 from transition_matrix import *
 import csv
 
-def getGazeTrails(file):
+def getGazeValues(file):
 	df = pd.read_csv(file,sep='\t')
 	df=df[["Event","Gaze point X", "Gaze point Y","Gaze event duration","Fixation point X","Fixation point Y"]]  # select columns
 
@@ -30,22 +30,17 @@ def getGazeTrails(file):
 
 	alltrials=[]
 	for i in range(stop_idx.shape[0]):
-		alltrials.append(df.loc[start_idx[i]:stop_idx[i]].dropna().to_numpy())
+		alltrials.append(df.loc[start_idx[i]:stop_idx[i]].dropna(subset = ["Gaze point X", "Gaze point Y"]).to_numpy())
+		# CAUTION: dropping NA values for "Gaze point X", "Gaze point Y" only. To drop all NA values use .dropna()
 	return(alltrials)
 
 def getAOI(nx, ny, screen_dimension):
-	#Setting important variables
-	TEST_VERTICES_1 = [[ 20,20] , [400,250], [40,400]]
-	TEST_VERTICES_2 = [[800,800], [1000,800], [700,650]]
-
 	x = np.linspace(0, screen_dimension[0], nx)
 	y = np.linspace(0, screen_dimension[1], ny)
 
 	xv, yv = np.meshgrid(x, y)
-	# print(x)
-	# print(y)
-	# print(xv.shape)
-	# print(yv.shape)
+	# print("Row and Col elements",x,y)
+	# print("Grid Dimensions", xv.shape, yv.shape)
 
 	aoiDict = {}
 	vertices=np.zeros((4,2))
@@ -59,7 +54,7 @@ def getAOI(nx, ny, screen_dimension):
 			# print(vertices)
 			aoiDict[aoiName]=PolyAOI(screen_dimension,vertices)
 
-	# print(len(aoiDict))
+	# print("AOI dict length ",len(aoiDict))
 
 	return(aoiDict)
 
@@ -75,20 +70,16 @@ def getSGE_GTE(trials):
 	for trial in trials:
 		gaze=np.zeros((trial.shape[0],3))
 		gaze[:,:2]=trial[:,:2]
+
 		fixation=trial[:,2:]
 		fixation=fixation[:,[1,2,0]]	
 		ec = EyesMetricCalculator(fixation,gaze,TEST_SCREENDIM)
-		# print('ConvexHullArea: ' ,ec.convexHull('area').compute() )
-		# print('SpatialDensity: ' , ec.spatialDensity(30,40).compute())
-		# print('NNI Metric: ' , ec.NNI().compute())
 		SGE=ec.GEntropy(TEST_AOI_DICT,'stationary').compute()
-		GTE=ec.GEntropy(TEST_AOI_DICT,'transition').compute()
-		# gz = GazeTransitions(TEST_SCREENDIM, TEST_AOI_DICT, gaze)
-		# gz.plot_all(annotate_points=True)
+		GTE=ec.GEntropy(TEST_AOI_DICT,'transition').compute()		
 
 		# print(trial)
-		# print(gaze)
-		# print(fixation)
+		# print("gaze ",gaze)
+		# print("fixation",fixation)
 		# print(SGE,GTE)
 		SGEdata.append(SGE)
 		GTEdata.append(GTE)
@@ -100,9 +91,10 @@ if __name__ == '__main__':
 	TEST_AOI_DICT=getAOI(11,11,TEST_SCREENDIM)
 	folder_name = 'data'
 	allgazedata=[]
+
 	for f in sorted(glob.glob(folder_name + "/*.tsv")):
 		print("Processing file: ",f)
-		trials=getGazeTrails(f) #"Gaze point X", "Gaze point Y","Gaze event duration","Fixation point X","Fixation point Y"
+		trials=getGazeValues(f) #"Gaze point X", "Gaze point Y","Gaze event duration","Fixation point X","Fixation point Y"
 		if len(trials)<20:
 			print("Incomplete data for this file {}".format(f))
 		else:
@@ -117,4 +109,4 @@ if __name__ == '__main__':
 	    # writing the data rows 
 	    csvwriter.writerows(allgazedata)
 
-	# np.save('gazedata', np.array(allgazedata))
+	np.save('gazedata', np.array(allgazedata))

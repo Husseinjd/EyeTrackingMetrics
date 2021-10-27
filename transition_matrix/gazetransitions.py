@@ -181,7 +181,7 @@ class GazeTransitions():
         if annotate_points:
             for i, txt in enumerate(self.gaze_array):
                 ax.annotate(tuple(txt[0:2]), (self.gaze_array[i,0] -5, self.gaze_array[i,1]+25))
-
+        # plt.savefig("aoi.png")
         plt.show()
 
     def get_transition_prob(self, aoi_1, aoi_2):
