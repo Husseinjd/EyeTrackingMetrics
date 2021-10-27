@@ -115,10 +115,10 @@ class GazeEntropy(Metric):
         entropy=0
         if self.entropy_method.lower() == 'transition' :
             entropy  = self._calc_transition(self.sp,self.tp)
-            return np.around(entropy,decimals=2)
+            return np.around(entropy,decimals=3)
 
         elif self.entropy_method.lower() == 'stationary' :
             entropy = self._calc_stationary(self.sp)
-            return np.around(entropy,decimals=2)
+            return np.around(entropy,decimals=3)
         else:
             raise Exception('Entropy takes options [transition,stationary]')
